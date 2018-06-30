@@ -1,0 +1,74 @@
+﻿@model Chat.DTO.DTO.SetSystemDTO
+@{
+    ViewBag.Title = "前台系统开放";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout1.cshtml";
+}
+
+<div class="box_con">
+    <div class="box box_width">
+
+        <div class="main_dt">
+            <h2>
+                前台设置
+            </h2>
+            <input type="hidden" id="hdstate" value="@Model.IsOpenWeb" />
+            <div class="operation">
+                <fieldset class="fieldset">
+                    <legend class="legSearch">系统前台状态</legend>
+                    <input type="radio" id="rdOpen" name="sysstate" />开启
+                    <input type="radio" id="rdClose" name="sysstate" />关闭
+                </fieldset>
+                <fieldset class="fieldset">
+                    <legend class="legSearch">关闭信息提示</legend>
+                    <textarea id="sysremark" cols="60" rows="10">@Model.CloseWebRemark</textarea>
+                </fieldset>
+                <a href="javascript:void(0);" id="asure" class="easyui-linkbutton" iconcls="icon-ok">提交</a>
+            </div>
+        </div>
+    </div>
+</div>
+@section FooterScript{
+    <script type="text/javascript">
+        
+        $(function () {
+            var istate = $("#hdstate").val();
+            if (istate == 1) {
+                $("#rdClose").attr("checked", "checked");
+            }
+            else {
+                $("#rdOpen").attr("checked", "checked");
+            }
+            
+            //提交
+            $("#asure").click(function () {
+                var a = -1;
+                var radios = document.getElementsByName("sysstate");
+                for (var i = 0; i < radios.length; i++) {
+                    if (radios[i].checked) {
+                        a = i;
+                    }
+                }                                                                                                                                                                                                                  
+                var remark = $("#sysremark").val();
+                if (a == -1) {
+                    alert("请选择系统前台状态");
+                    return;
+                }
+                $.ajax({
+                    url: "/admin/system/updatesysstate",
+                    type: "post",
+                    data: { state: a, remark: remark },
+                    success: function (result) {
+                        if (result.status == 1) {
+                            window.location.href = result.data;
+                        }
+                        else if (result.status == 0) {
+                            alert(result.msg);
+                        }
+                    },
+                    error: function () { alert("网络错误"); }
+                });
+            });
+        });
+    </script>
+
+}

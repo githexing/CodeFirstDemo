@@ -1,0 +1,89 @@
+﻿@model Chat.FrontWeb.Areas.Admin.Models.System.SecurityListModel
+@{
+    ViewBag.Title = "前台系统开放";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout1.cshtml";
+}
+<div class="box_con">
+    <div class="box box_width">
+        <div class="main_dt">
+            <h2>
+                前台设置
+            </h2>
+            <ul>
+                <li>
+                    <span style="margin-right: 10px; display: block; width: 300px; text-align: right; float: left;">
+                        <font>*</font>密保问题：
+                    </span>
+                    <input type="text" class="input_second" placeholder="输入密保问题" id="txtquestion" />
+                </li>
+                <li style="padding-left: 310px;">
+                    <a href="javascript:void(0);" id="addsecurity" class="easyui-linkbutton" iconcls="icon-save">添 加</a>
+                </li>
+            </ul>
+
+            <div class="dataTable">
+                <table width="99%" border="0" cellspacing="0" cellpadding="0" class="t1">
+                    <tr>
+                        <th align="center">密保问题</th>
+                        <th align="center">添加时间</th>
+                        <th align="center">操作</th>
+                    </tr>
+                    <tr>
+                        @foreach (var temp in Model.slist)
+                        {
+                            <td>@temp.Question</td>
+                            <td>@temp.CreateTime</td>
+                            <td align="center">
+                                <a href="javascript:void(0);" class="easyui-linkbutton del" iconcls="icon-no" id="@temp.ID">删除</a>
+                            </td>
+                        }
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@section FooterScript{
+    <script type="text/javascript">
+
+        $(function () {
+            //添加
+            $("#addsecurity").click(function () {
+                var question = $("#txtquestion").val();
+                $.ajax({
+                    url: "/admin/system/AddSecurity",
+                    type: "post",
+                    data: { question: question },
+                    success: function (result) {
+                        if (result.status == 1) {
+                            window.location.href = result.data;
+                        }
+                        else if (result.status == 0) {
+                            alert(result.msg);
+                        }
+                    },
+                    error: function () { alert("网络错误"); }
+                });
+            });
+            //删除
+            $(".del").click(function () {
+                var a = $(this).attr("id");
+                console.log(a);
+                $.ajax({
+                    url: "/admin/system/SecurityDel?id=" + a,
+                    type: "post",
+                    success: function (result) {
+                        if (result.status == 1) {
+                            window.location.href = result.data;
+                        }
+                        else if (result.status == 0) {
+                            alert(result.msg);
+                        }
+                    },
+                    error: function () { alert("网络错误"); }
+                });
+            });
+        });
+    </script>
+
+}

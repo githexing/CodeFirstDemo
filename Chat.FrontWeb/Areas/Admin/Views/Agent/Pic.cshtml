@@ -1,0 +1,79 @@
+﻿
+@{
+    ViewBag.Title = "Pic会员不同等级人数占比，饼图";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout1.cshtml";
+}
+<div id="main" style="width: 600px;height:400px;"></div>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/js/echarts.min.js"></script>
+<script type="text/javascript">
+
+    $(function () {
+        $.ajax({
+            url:"/admin/Agent/Pic1",
+            type: "POST",
+            success: function (date) {
+                //series_data = [  
+                //       { value: 310, name: '邮件营销' },
+                //       { value: 234, name: '联盟广告' },
+                //       { value: 135, name: '视频广告' },
+                //       { value: 1548, name: '搜索引擎1' }];
+                var series_data;
+                var legend_data;//['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎1']
+                //console.log(date.status.dates[0]['value'])
+                console.log(date.data[0].value)
+               
+                for (var i = 0; i < date.data.length; i++) {
+                    if (i==0) {
+                        series_data = "[{ value:" + date.data[i].name + ", name:" + "'" + date.data[i].value + "' }";
+                        legend_data = "['" + date.data[i].value + "'";
+                        continue;
+                    }
+                    if (i==date.data.length-1) {
+                        series_data += ",{ value:" + date.data[i].name + " , name: " + "'" + date.data[i].value + "' }]";
+                        legend_data += ",'" + date.data[i].value + "']";
+                        break;
+                    }
+                    series_data += ",{ value:" + date.data[i].name + ", name: " + "'" + date.data[i].value + "' }";
+                    legend_data += ",'" + date.data[i].value + "'";
+                }
+                series_data = eval('(' + series_data + ')')
+                legend_data = eval('(' + legend_data + ')')
+              var myChart = echarts.init(document.getElementById('main')); 
+    option = {
+        title: {
+            text: '会员等级分布图',
+            subtext: '饼图',
+            x: 'center'
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: " {b} : {c}人  ({d}%)"//{a} {b} : {c}  ({d}%)
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+            data: legend_data
+        },
+        series: [
+            {
+                name: '会员等级比例',
+                type: 'pie',
+                radius: '55%',
+                center: ['50%', '60%'],
+                data: series_data,
+                itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    }; 
+    myChart.setOption(option);
+            }
+        })
+    })
+</script>

@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewBag.Title = "Register";
+}
+<script src="~/js/jquery-2.1.1.min.js"></script>
+<h2>Register</h2>
+账号：<input  type="text" id="txtUserCode" /><br />
+登陆密码：<input type="text" id="txtPassword" /><br />
+确认登陆密码：<input type="text" id="txtPasswords" /><br />
+交易密码：<input type="text" id="txtSecondPassword" /><br />
+确认密码：<input type="text" id="txtSecondPasswords" /><br />
+推荐人：<input type="text" id="txtRecommend" /><br />
+<input type="button" value="注册"  id="btn" /><br />
+
+
+<script type="text/javascript">
+
+
+
+    $(function () {
+        $("#btn").click(function () {
+            alert(1);
+            $.ajax({
+                url: "/Reg/Zuce",
+                 type: "post",
+                 success: function (data) {
+
+
+                 }
+
+            })
+
+
+
+        }) 
+    })
+
+
+</script>
+
+
+ 
+

@@ -1,0 +1,105 @@
+﻿@model Chat.FrontWeb.Areas.Admin.Models.Finance.AccountModel
+@{
+    ViewBag.Title = "账户查询";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout1.cshtml";
+}
+
+
+<div class="dataTable">
+    <table width="99%" border="0" cellspacing="0" cellpadding="0" class="t1">
+        <tr>
+            <th align="center"></th>
+            <th align="center">
+                总收入
+            </th>
+            <th align="center">
+                总支出
+            </th>
+            <th align="center">
+                总盈利
+            </th>
+            <th align="center">
+                拨出比率
+            </th>
+        </tr>
+     
+        <tr>
+            <td align="center">
+                总计
+            </td>
+            <td align="center">
+
+                @Model.AccountTotol.sr
+            </td>
+            <td align="center">
+                @Model.AccountTotol.zc
+            </td>
+            <td align="center">
+                @Model.AccountTotol.yl
+            </td>
+            <td align="center">
+                @Model.AccountTotol.bl
+            </td>
+        </tr>
+      
+    </table>
+</div>
+<div class="operation">
+    <fieldset class="fieldset">
+        <legend class="legSearch">查詢</legend>
+        結算日期：<input type="text" class="input_select" id="txtstart" onfocus="WdatePicker()" placeholder="输入日期" />
+        至<input type="text" class="input_select" id="txtend" onfocus="WdatePicker()" placeholder="输入日期" />
+        <a href="javascript:void(0);" class="easyui-linkbutton" iconcls="icon-search" id="search">搜 索</a>
+    </fieldset>
+</div>
+<div class="dataTable">
+    <table width="99%" border="0" cellspacing="0" cellpadding="0" class="t1">
+        <tr>
+            <th align="center">
+                結算日期
+            </th>
+            <th align="center">
+                本日收入
+            </th>
+            <th align="center">
+                本日支出
+            </th>
+            <th align="center">
+                本日盈利
+            </th>
+            <th align="center">
+                拨出比率
+            </th>
+        </tr>
+        <tbody id="pagerList">
+            
+            @foreach (var rmodel in Model.accountList)
+            {
+                <tr>
+                    <td align="center">
+                        @rmodel.recordTime
+
+                    </td>
+                    <td align="center">
+                        @rmodel.sr
+                       
+                    </td>
+                    <td align="center">
+                        @rmodel.zc
+                         
+                    </td>
+                    <td align="center">
+                        
+                        @rmodel.yl
+                    </td>
+                    <td align="center">
+                        @*<%#MyBL(Eval("sr"),Eval("zc"))%>*@
+                    </td>
+                </tr>
+            }
+        </tbody>
+</table>
+    <div class="nextpage cBlack">
+        @Html.Raw(Model.Page)
+    </div>
+</div>
